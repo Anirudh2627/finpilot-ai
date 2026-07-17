@@ -1,0 +1,95 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===== Custom Animations and Utilities (kept minimal) ===== */
+@keyframes fade-in-up {
+  0% { opacity: 0; transform: translateY(12px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes ticker-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+@keyframes pulse-soft {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(34,197,94,0.25); }
+  50% { box-shadow: 0 0 0 6px rgba(34,197,94,0.0); }
+}
+@keyframes glow {
+  0% { opacity: 0.8; }
+  50% { opacity: 1; }
+  100% { opacity: 0.8; }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 500ms ease-out both;
+}
+
+.ticker {
+  overflow: hidden;
+  white-space: nowrap;
+  border-top: 1px solid #1f2937; /* gray-800 */
+  border-bottom: 1px solid #1f2937;
+  background: rgba(17,24,39,0.7); /* gray-900/70 */
+  backdrop-filter: blur(8px);
+}
+.ticker-track {
+  display: inline-block;
+  animation: ticker-scroll 30s linear infinite;
+  will-change: transform;
+}
+
+/* Circular gauge classes in 10% steps */
+.gauge {
+  border-radius: 9999px;
+  position: relative;
+}
+.gauge::after {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  background: #0b1220; /* deep panel bg */
+  border-radius: 9999px;
+}
+.gauge-0   { background-image: conic-gradient(#111827 0deg, #111827 360deg); } /* empty */
+.gauge-10  { background-image: conic-gradient(#22c55e 36deg, #111827 0deg); }
+.gauge-20  { background-image: conic-gradient(#22c55e 72deg, #111827 0deg); }
+.gauge-30  { background-image: conic-gradient(#22c55e 108deg, #111827 0deg); }
+.gauge-40  { background-image: conic-gradient(#22c55e 144deg, #111827 0deg); }
+.gauge-50  { background-image: conic-gradient(#22c55e 180deg, #111827 0deg); }
+.gauge-60  { background-image: conic-gradient(#22c55e 216deg, #111827 0deg); }
+.gauge-70  { background-image: conic-gradient(#22c55e 252deg, #111827 0deg); }
+.gauge-80  { background-image: conic-gradient(#22c55e 288deg, #111827 0deg); }
+.gauge-90  { background-image: conic-gradient(#22c55e 324deg, #111827 0deg); }
+.gauge-100 { background-image: conic-gradient(#22c55e 360deg, #111827 0deg); }
+
+/* Red gauge variant (optional for risk or negative) */
+.gauge-red-10  { background-image: conic-gradient(#ef4444 36deg, #111827 0deg); }
+.gauge-red-20  { background-image: conic-gradient(#ef4444 72deg, #111827 0deg); }
+.gauge-red-30  { background-image: conic-gradient(#ef4444 108deg, #111827 0deg); }
+.gauge-red-40  { background-image: conic-gradient(#ef4444 144deg, #111827 0deg); }
+.gauge-red-50  { background-image: conic-gradient(#ef4444 180deg, #111827 0deg); }
+.gauge-red-60  { background-image: conic-gradient(#ef4444 216deg, #111827 0deg); }
+.gauge-red-70  { background-image: conic-gradient(#ef4444 252deg, #111827 0deg); }
+.gauge-red-80  { background-image: conic-gradient(#ef4444 288deg, #111827 0deg); }
+.gauge-red-90  { background-image: conic-gradient(#ef4444 324deg, #111827 0deg); }
+.gauge-red-100 { background-image: conic-gradient(#ef4444 360deg, #111827 0deg); }
+
+/* Soft glass surface */
+.glass {
+  backdrop-filter: blur(10px);
+  background-color: rgba(17,24,39,0.75); /* gray-900/75 */
+}
+
+/* Compact scrollbars for dense terminal areas */
+::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #374151; /* gray-700 */
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-track {
+  background-color: #111827; /* gray-900 */
+}
