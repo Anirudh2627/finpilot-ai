@@ -1,5 +1,6 @@
-from sqlalchemy import Column, Integer, String, Float
-from app.database import Base
+from sqlalchemy import Column, Float, Integer, String
+
+from ..database import Base
 
 
 class Portfolio(Base):

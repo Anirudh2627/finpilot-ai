@@ -415,35 +415,47 @@ export default function App() {
   const [currentStep, setCurrentStep] = useState(0)
   const workspaceRef = useRef(null)
   const marketRef = useRef(null)
+  const backendUrl = (import.meta.env.VITE_BACKEND_URL || 'http://127.0.0.1:8000').replace(/\/$/, '')
 
-  const onAnalyze = useCallback((query) => {
-    // Simulate full workflow
+  const onAnalyze = useCallback(async (query) => {
     setIsAnalyzing(true)
     setCurrentStep(0)
     let step = 0
     const interval = setInterval(() => {
-      step += 1
-      if (step < loadingSequence.length) {
-        setCurrentStep(step)
-      } else {
-        clearInterval(interval)
-        // Simulate updated response (kept consistent with contract)
-        setData((prev) => ({
-          ...prev,
-          execution_time: 2.1,
-          decision: 'BUY',
-          confidence: 0.91,
-          summary:
-            'Revenue growth, positive market sentiment and your investment horizon strongly support a BUY recommendation.',
-          // could adjust small bits to show freshness
-        }))
-        setIsAnalyzing(false)
-        if (workspaceRef.current) {
-          workspaceRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
-        }
-      }
+      step = (step + 1) % loadingSequence.length
+      setCurrentStep(step)
     }, 450)
-  }, [])
+
+    try {
+      const response = await fetch(`${backendUrl}/analyze`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query }),
+      })
+
+      if (!response.ok) throw new Error(`Analyze failed: ${response.status}`)
+      const result = await response.json()
+
+      setData((prev) => ({
+        ...prev,
+        ...result,
+        market: result.market || prev.market
+      }))
+    } catch (error) {
+      setData((prev) => ({
+        ...prev,
+        summary: 'Backend unavailable. Showing the latest local analysis snapshot.'
+      }))
+      console.error(error)
+    } finally {
+      clearInterval(interval)
+      setCurrentStep(loadingSequence.length - 1)
+      setIsAnalyzing(false)
+      if (workspaceRef.current) {
+        workspaceRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }
+    }
+  }, [backendUrl])
 
   const toggleTheme = useCallback(() => {
     setThemeDark((d) => !d)
