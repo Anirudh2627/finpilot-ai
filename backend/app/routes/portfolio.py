@@ -1,9 +1,9 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
-from ..database import SessionLocal
-from ..models.portfolio import Portfolio
-from ..schemas.portfolio import PortfolioCreate
+from app.database import SessionLocal
+from app.models.portfolio import Portfolio
+from app.schemas.portfolio import PortfolioCreate
 
 router = APIRouter()
 
@@ -15,13 +15,15 @@ def get_db():
     finally:
         db.close()
 
-
 @router.post("/portfolio")
-def add_portfolio(portfolio: PortfolioCreate, db: Session = Depends(get_db)):
+def add_portfolio(
+    portfolio: PortfolioCreate,
+    db: Session = Depends(get_db)
+):
     new_stock = Portfolio(
         stock=portfolio.stock,
         quantity=portfolio.quantity,
-        buy_price=portfolio.buy_price,
+        buy_price=portfolio.buy_price
     )
 
     db.add(new_stock)
@@ -30,18 +32,26 @@ def add_portfolio(portfolio: PortfolioCreate, db: Session = Depends(get_db)):
 
     return new_stock
 
-
 @router.get("/portfolio")
 def get_portfolio(db: Session = Depends(get_db)):
-    return db.query(Portfolio).all()
+    portfolio = db.query(Portfolio).all()
+    return portfolio
 
-
+from fastapi import HTTPException
 @router.delete("/portfolio/{portfolio_id}")
-def delete_portfolio(portfolio_id: int, db: Session = Depends(get_db)):
-    stock = db.query(Portfolio).filter(Portfolio.id == portfolio_id).first()
+def delete_portfolio(
+    portfolio_id: int,
+    db: Session = Depends(get_db)
+):
+    stock = db.query(Portfolio).filter(
+        Portfolio.id == portfolio_id
+    ).first()
 
     if stock is None:
-        raise HTTPException(status_code=404, detail="Investment not found")
+        raise HTTPException(
+            status_code=404,
+            detail="Investment not found"
+        )
 
     db.delete(stock)
     db.commit()
