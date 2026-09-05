@@ -80,24 +80,19 @@ AI Models
 ________________________________________
 📂 Project Structure
 finpilot-ai/
-├── frontend/
-│   ├── index.html
-│   ├── src/
-│   │   ├── App.tsx
-│   │   ├── main.tsx
-│   │   ├── index.css
-│   │   └── components/
-│   └── package.json
+
+├── frontend/              # React application
 ├── backend/
-│   ├── app/
-│   │   ├── main.py
-│   │   ├── agents/
-│   │   │   └── workflow.py
-│   │   ├── routes/
-│   │   ├── models/
-│   │   └── schemas/
-│   └── requirements.txt
-└── README.md
+│   ├── agents/
+│   ├── graph/
+│   ├── workflow.py
+│   ├── ml_engine.py
+│   ├── dataset_generator.py
+│   └── state.py
+│
+├── assets/
+├── README.md
+└── requirements.txt
 ________________________________________
 🚀 Getting Started
 Clone the Repository
@@ -105,8 +100,8 @@ git clone https://github.com/Anirudh2627/finpilot-ai.git
 cd finpilot-ai
 ________________________________________
 Install Frontend
-cd frontend
 npm install
+Run the development server:
 npm run dev
 ________________________________________
 Install Backend
@@ -118,15 +113,14 @@ venv\Scripts\activate
 Linux / macOS
 source venv/bin/activate
 Install dependencies:
-pip install -r backend/requirements.txt
+pip install -r requirements.txt
 Run the backend:
-uvicorn backend.app.main:app --reload
+uvicorn backend.main:server --reload
 ________________________________________
 🔑 Environment Variables
 Create a .env file.
 OPENAI_API_KEY=your_openai_api_key
 FINNHUB_API_KEY=your_finnhub_api_key
-For frontend API wiring, set `VITE_BACKEND_URL` (default is `http://127.0.0.1:8000`).
 ________________________________________
 📊 Explainable AI
 Unlike traditional AI systems that only produce predictions, FinPilot explains why a prediction was made.
